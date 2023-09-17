@@ -17,17 +17,63 @@ public class Main {
 
     public static void main(String[] args) {
 
-        try (EntityManagerFactory factory = Persistence.createEntityManagerFactory(
-                PERSISTENCE_UNIT_NAME); EntityManager em = factory.createEntityManager()) {
+        try (EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+             EntityManager em = factory.createEntityManager()) {
+
             em.getTransaction().begin();
-            //List<Object> createdObjects = createObjects(em);
+            createTestData(em);
             em.getTransaction().commit();
+
             inspectTheDatabase();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+    private static void createTestData(EntityManager em) {
+
+        // Create IoTDevice with associated IoTDisplay
+        IoTDevice device = new IoTDevice();
+        IoTDisplay display = new IoTDisplay();
+        device.setDisplay(display);
+        display.setDevice(device);
+        em.persist(device);
+        em.persist(display);
+
+        // Create Poll
+        Poll poll = new Poll();
+        poll.setPairedIoT(device);
+        device.setPairedPoll(poll);
+        em.persist(poll);
+
+        // Create User
+        User user = new User();
+        user.setUsername("username1");
+        user.setEmail("user1@example.com");
+        user.setPassword("password1");
+        List<Poll> userPolls = new ArrayList<>();
+        userPolls.add(poll);
+        user.setPolls(userPolls);
+        em.persist(user);
+
+        // Create Voter, which is a subclass of User
+        Voter voter = new Voter();
+        voter.setUsername("voter1");
+        voter.setEmail("voter1@example.com");
+        voter.setPassword("password1");
+        voter.setHasVoted(false);
+        em.persist(voter);
+
+        // Create WebClient
+        WebClient webClient = new WebClient();
+        webClient.setRedVotes(10);
+        webClient.setGreenVotes(20);
+        em.persist(webClient);
+
+        // You can add more test data as per your requirements
+    }
+
 
     private static void inspectTheDatabase(){
 
