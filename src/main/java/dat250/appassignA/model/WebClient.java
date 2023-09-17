@@ -15,6 +15,13 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class WebClient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @Setter
+    @Getter
     private Integer redVotes;
-    private Intefer greenVotes;
+    @Setter
+    @Getter
+    private Integer greenVotes;
 }

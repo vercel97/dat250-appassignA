@@ -15,12 +15,19 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
-// Parent class User
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private String username;
+    @Setter
+    @Getter
     private String email;
+    @Setter
+    @Getter
     private String password;
+    @Setter
+    @Getter
     private List<Poll> polls;
 
     // Constructors
