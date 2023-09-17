@@ -28,6 +28,7 @@ public class User {
     private String password;
     @Setter
     @Getter
+    @OneToMany
     private List<Poll> polls;
 
     // Constructors
